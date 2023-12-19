@@ -42,6 +42,7 @@ class Department(models.Model):
     general = models.OneToOneField(Employee,
                                    on_delete=models.CASCADE,
                                    unique=True,
+                                   null=True,
                                    limit_choices_to=
                                    {"position":
                                     Employee.Position.GENERAL_MANAGER},

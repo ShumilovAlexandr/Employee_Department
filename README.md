@@ -6,3 +6,6 @@
 5) тесты
 6) асинхронный django
 7) подключить graphql
+8) keyclock
+9) elasticksearch
+10) 
