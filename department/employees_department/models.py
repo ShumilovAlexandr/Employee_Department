@@ -9,6 +9,7 @@ class Employee(models.Model):
         GENERAL_MANAGER = (1, 'Директор')
 
     fio = models.CharField(max_length=200,
+                           db_index=True,
                            verbose_name='ФИО')
     foto = models.ImageField(upload_to='uploads/',
                              verbose_name='Фото')
