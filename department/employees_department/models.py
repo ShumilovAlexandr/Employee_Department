@@ -34,14 +34,14 @@ class Employee(models.Model):
     class Meta:
         verbose_name = 'Работник'
         verbose_name_plural = 'Работники'
+        unique_together = ["fio", "department"]
 
 
 class Department(models.Model):
     name = models.CharField(max_length=200,
                             verbose_name='Название департамента')
     general = models.OneToOneField(Employee,
-                                   on_delete=models.CASCADE,
-                                   unique=True,
+                                   on_delete=models.SET_NULL,
                                    null=True,
                                    limit_choices_to=
                                    {"position":

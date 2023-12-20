@@ -9,7 +9,8 @@ from .models import (Department,
 # Тут тупо можно использовать ModelSerializer, но я пошел по другому пути
 class DepartmentSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
-    general = serializers.StringRelatedField()
+    general = serializers.PrimaryKeyRelatedField(
+        queryset=Employee.objects.all())
 
     def create(self, validated_data):
         return Department.objects.create(**validated_data)
@@ -30,7 +31,8 @@ class EmployeeSerializer(serializers.Serializer):
     salary = serializers.IntegerField(min_value=0)
     age = serializers.IntegerField(min_value=18,
                                    max_value=64)
-    department = serializers.ChoiceField(choices=Department.objects.all())
+    department = serializers.PrimaryKeyRelatedField(queryset=
+                                                    Department.objects.all())
 
     def create(self, validated_data):
         return Employee.objects.create(**validated_data)
