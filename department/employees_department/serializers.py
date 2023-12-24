@@ -1,19 +1,21 @@
-from abc import ABC
-
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from .models import (Department,
                      Employee)
 
 
-# Тут тупо можно использовать ModelSerializer, но я пошел по другому пути
 class DepartmentSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     general = serializers.PrimaryKeyRelatedField(
-        queryset=Employee.objects.all())
+        queryset=Employee.objects.filter(
+            position=Employee.Position.GENERAL_MANAGER),
+        allow_null=True,
+        required=False)
 
     def create(self, validated_data):
-        return Department.objects.create(**validated_data)
+        departament = Department.objects.create(**validated_data)
+        return departament
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name',
@@ -22,6 +24,13 @@ class DepartmentSerializer(serializers.Serializer):
                                               instance.general)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        general = super(DepartmentSerializer, self).to_representation(instance)
+        general['general'] = instance.general.fio
+        general['employee_count'] = instance.employee_count
+        general['salary_sum'] = instance.salary_sum
+        return general
 
 
 class EmployeeSerializer(serializers.Serializer):
@@ -52,4 +61,11 @@ class EmployeeSerializer(serializers.Serializer):
                                                  instance.department)
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        employee = super(EmployeeSerializer, self).to_representation(instance)
+        employee['department'] = instance.department.name
+        employee['position'] = instance.get_position_display()
+        return employee
+
 

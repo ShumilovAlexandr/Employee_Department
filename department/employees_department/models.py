@@ -27,6 +27,8 @@ class Employee(models.Model):
     department = models.ForeignKey('Department',
                                    on_delete=models.CASCADE,
                                    related_name='employee',
+                                   blank=True,
+                                   null=True,
                                    verbose_name='Департамент')
 
     def __str__(self):
