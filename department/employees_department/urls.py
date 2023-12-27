@@ -15,7 +15,3 @@ router.register(r'department',
                 basename='Department')
 
 urlpatterns = router.urls
-# urlpatterns = [
-#     path('employee/<int:pk>/', views.EmployeeViewSet.as_view(),
-#          name='delete_employee'),
-# ]
