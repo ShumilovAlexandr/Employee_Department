@@ -17,6 +17,24 @@ class EmployeeDepartmentViewsTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.department = Department.objects.create(
+            name='УНДО',
+        )
+        cls.employee = Employee.objects.create(
+            fio='Шумилов Александр Владимирович',
+            foto=SimpleUploadedFile(name='test_image.jpg',
+                                    content=open(
+                                        'uploads/1595243772_photo-of-man-taking-selfie-2406949.jpg',
+                                        'rb').read(),
+                                    content_type='image/jpeg'),
+            position=True,
+            salary=200000,
+            age=25,
+            department=cls.department,
+        )
+        cls.department.general = cls.employee
+        cls.department.save()
+        cls.employee.save()
         super().setUpClass()
 
     def test_employee_being_create(self):
@@ -62,7 +80,14 @@ class EmployeeDepartmentViewsTest(TestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
-    def tearDown(self):
-        super().tearDown()
+    def test_can_delete_employee(self):
+        response = self.client.delete(
+            path=URL_PATH + f'api/v1/employee/{self.employee.id}/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Employee.objects.filter(pk=self.employee.id))
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
 
 
