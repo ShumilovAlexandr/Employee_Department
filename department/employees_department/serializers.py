@@ -12,6 +12,8 @@ class DepartmentSerializer(serializers.Serializer):
             position=Employee.Position.GENERAL_MANAGER),
         allow_null=True,
         required=False)
+    employee_count = serializers.IntegerField(read_only=True)
+    salary_sum = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data):
         departament = Department.objects.create(**validated_data)
@@ -27,9 +29,10 @@ class DepartmentSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         general = super(DepartmentSerializer, self).to_representation(instance)
-        general['general'] = instance.general.fio
-        general['employee_count'] = instance.employee_count
-        general['salary_sum'] = instance.salary_sum
+        if general and instance.general and instance.general.fio:
+            general['general'] = instance.general.fio
+        else:
+            general['general'] = None
         return general
 
 

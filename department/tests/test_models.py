@@ -6,13 +6,12 @@ from employees_department.models import (Employee,
 
 
 class EmployeeDepartmentModelTest(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.department = Department.objects.create(
+
+    def setUp(self):
+        self.department = Department.objects.create(
             name='УНДО',
         )
-        cls.employee = Employee.objects.create(
+        self.employee = Employee.objects.create(
             fio='Шумилов Александр Владимирович',
             foto=SimpleUploadedFile(name='test_image.jpg',
                                     content=open(
@@ -21,14 +20,14 @@ class EmployeeDepartmentModelTest(TestCase):
             position=True,
             salary=200000,
             age=25,
-            department=cls.department,
+            department=self.department,
             )
-        cls.department.general = cls.employee
-        cls.department.save()
-        cls.employee.save()
+        self.department.general = self.employee
+        self.department.save()
+        self.employee.save()
 
     def test_verbose_name(self):
-        employee = EmployeeDepartmentModelTest.employee
+        empl = self.employee
         field_verbose = {
             'fio': 'ФИО',
             'foto': 'Фото',
@@ -40,13 +39,16 @@ class EmployeeDepartmentModelTest(TestCase):
         for field, expected in field_verbose.items():
             with self.subTest(field=field):
                 self.assertEqual(
-                    employee._meta.get_field(field).verbose_name, expected
+                    empl._meta.get_field(field).verbose_name, expected
                 )
 
     def test_may_be_several_employees_in_the_department(self):
-        employee = EmployeeDepartmentModelTest.employee
-        department = EmployeeDepartmentModelTest.department
+        employee = self.employee
+        department = self.department
         self.assertIsInstance(employee.department, Department)
         self.assertIsInstance(department.general, Employee)
+
+    def tearDown(self):
+        super().tearDown()
 
 

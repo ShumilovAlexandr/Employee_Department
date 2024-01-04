@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -19,7 +21,8 @@ from .pagination import EmployeePagination
 class EmployeeViewSet(viewsets.GenericViewSet,
                       mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
-                      mixins.CreateModelMixin):
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin):
     serializer_class = EmployeeSerializer
     queryset = Employee.objects.all()
     filter_backends = [DjangoFilterBackend]

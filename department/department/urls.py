@@ -8,6 +8,10 @@ from drf_yasg import openapi
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView,
                                             TokenVerifyView)
+from graphene_django.views import GraphQLView
+
+
+from employees_department import schema
 
 
 schema_view = get_schema_view(
@@ -32,4 +36,5 @@ urlpatterns = [
          name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
          name='schema-redoc'),
+    path('graphql/', GraphQLView.as_view(graphiql=True)),
 ]
