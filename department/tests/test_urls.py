@@ -23,7 +23,7 @@ class UrlAddressTest(TestCase):
             name='УНДО',
         )
         self.employee = Employee.objects.create(
-            fio='Шумилов Александр Владимирович',
+            fio='Иванов Иван Иванович',
             foto=SimpleUploadedFile(name='test_image.jpg',
                                     content=open(
                                         'uploads/1595243772_photo-of-man-taking-selfie-2406949.jpg',
